@@ -1,0 +1,2411 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#060B17" />
+<title>עובדה חקירות · ספר האוטומציות · גרסה מפורטת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=Assistant:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg-deep: #060B17;
+    --bg-base: #0A1322;
+    --bg-elev: #11203A;
+    --bg-card: rgba(17, 32, 58, 0.72);
+    --bg-card-hi: rgba(22, 41, 74, 0.92);
+    --line: rgba(212, 175, 55, 0.10);
+    --line-soft: rgba(255, 255, 255, 0.06);
+    --line-mid: rgba(255, 255, 255, 0.10);
+    --line-strong: rgba(212, 175, 55, 0.32);
+    --gold: #D4AF37;
+    --gold-soft: #E5C76B;
+    --gold-bright: #F2D77A;
+    --teal: #5EE7DF;
+    --teal-deep: #2BB3AB;
+    --rose: #F08A88;
+    --violet: #B89AFE;
+    --orange: #FFB068;
+    --green: #6BD89D;
+    --blue: #6FA8FF;
+    --text-hi: #EDF1F8;
+    --text-mid: #B6C4DC;
+    --text-low: #7E8DAA;
+    --text-very-low: #5C6B85;
+    --shadow-card: 0 1px 0 rgba(255,255,255,.04) inset, 0 24px 48px -22px rgba(0,0,0,.55);
+    --shadow-hover: 0 1px 0 rgba(255,255,255,.06) inset, 0 36px 72px -24px rgba(0,0,0,.7);
+
+    --cat-intake: #6FA8FF;
+    --cat-validation: #6BD89D;
+    --cat-lifecycle: #B89AFE;
+    --cat-ops: #FFB068;
+    --cat-finance: #E5C76B;
+
+    --topbar-h-desktop: 116px;
+    --topbar-h-mobile: 156px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    background: var(--bg-deep);
+    color: var(--text-hi);
+    font-family: "Heebo", "Assistant", system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    direction: rtl;
+    text-align: right;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+  body {
+    background:
+      radial-gradient(1100px 700px at 95% -8%, rgba(212,175,55,0.08), transparent 60%),
+      radial-gradient(900px 600px at -5% 30%, rgba(94,231,223,0.05), transparent 55%),
+      radial-gradient(900px 800px at 50% 110%, rgba(184,154,254,0.04), transparent 60%),
+      linear-gradient(180deg, #060B17 0%, #08111F 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  img, svg { display: block; max-width: 100%; }
+  button, input { font-family: inherit; }
+
+  /* ========== Top bar ========== */
+  .topbar {
+    position: fixed;
+    top: 0; right: 0; left: 0;
+    z-index: 100;
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    background: rgba(6, 11, 23, 0.85);
+    border-bottom: 1px solid var(--line);
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .topbar-row {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 14px 32px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 24px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    font-weight: 600; font-size: 15px;
+    line-height: 1.2;
+    flex-shrink: 0;
+  }
+  .brand-mark {
+    width: 38px; height: 38px;
+    border-radius: 11px;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, #D4AF37, #8C6F1E);
+    color: #0B1729;
+    font-weight: 800;
+    font-size: 17px;
+    box-shadow: 0 8px 22px -6px rgba(212,175,55,.55);
+    flex-shrink: 0;
+  }
+  .brand-text { min-width: 0; }
+  .brand small {
+    display: block; color: var(--text-low);
+    font-weight: 400; font-size: 11px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* Search */
+  .search {
+    position: relative;
+    max-width: 520px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .search-input {
+    width: 100%;
+    background: rgba(11, 19, 34, 0.85);
+    border: 1px solid var(--line-mid);
+    color: var(--text-hi);
+    border-radius: 10px;
+    padding: 11px 44px 11px 16px;
+    font-family: inherit;
+    font-size: 14px;
+    transition: border-color .2s ease, box-shadow .2s ease;
+    direction: rtl;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .search-input::placeholder { color: var(--text-very-low); }
+  .search-input:focus {
+    outline: none;
+    border-color: var(--line-strong);
+    box-shadow: 0 0 0 3px rgba(212,175,55,.10);
+  }
+  .search-icon {
+    position: absolute;
+    right: 14px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px;
+    color: var(--text-low);
+    pointer-events: none;
+  }
+  .search-shortcut {
+    position: absolute;
+    left: 10px; top: 50%; transform: translateY(-50%);
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--text-very-low);
+    background: rgba(255,255,255,.04);
+    padding: 3px 7px;
+    border-radius: 4px;
+    border: 1px solid var(--line-soft);
+    pointer-events: none;
+  }
+
+  .topbar-meta {
+    color: var(--text-low);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-align: left;
+    line-height: 1.5;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .topbar-meta strong { color: var(--gold-soft); display: block; font-weight: 600; }
+
+  /* Filter row — horizontally scrollable on mobile */
+  .filter-row {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    background: transparent;
+    border: 1px solid var(--line-mid);
+    color: var(--text-mid);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .2s ease;
+    display: inline-flex; align-items: center; gap: 6px;
+    white-space: nowrap;
+    min-height: 34px;
+    flex-shrink: 0;
+  }
+  .chip:hover { border-color: var(--line-strong); color: var(--text-hi); }
+  .chip.active {
+    background: rgba(212,175,55,.12);
+    border-color: var(--line-strong);
+    color: var(--gold-soft);
+  }
+  .chip .count {
+    background: rgba(255,255,255,.06);
+    border-radius: 6px;
+    padding: 1px 7px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-mid);
+  }
+  .chip.active .count { background: rgba(212,175,55,.16); color: var(--gold-soft); }
+  .chip.dot::before {
+    content: ""; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--c, var(--gold));
+    flex-shrink: 0;
+  }
+
+  /* ========== Layout ========== */
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ========== Hero ========== */
+  .hero {
+    padding: calc(var(--topbar-h-desktop) + 50px) 0 70px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(212,175,55,.08);
+    color: var(--gold-soft);
+    border: 1px solid var(--line-strong);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    letter-spacing: 0.22em;
+    font-weight: 600;
+    margin-bottom: 26px;
+    text-transform: uppercase;
+  }
+  .hero-tag .pulse {
+    width: 6px; height: 6px;
+    background: var(--gold); border-radius: 50%;
+    box-shadow: 0 0 12px var(--gold);
+    animation: pulse 2.4s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+  h1 {
+    font-size: clamp(34px, 5.4vw, 76px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.024em;
+  }
+  h1 .accent {
+    background: linear-gradient(135deg, #F2D77A 0%, #D4AF37 50%, #8C6F1E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-sub {
+    margin-top: 24px;
+    max-width: 820px;
+    font-size: clamp(15px, 1.6vw, 18px);
+    line-height: 1.75;
+    color: var(--text-mid);
+  }
+
+  /* KPI strip */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    margin-top: 50px;
+    padding-top: 36px;
+    border-top: 1px solid var(--line);
+  }
+  .kpi { padding: 4px 0; min-width: 0; }
+  .kpi .lbl {
+    color: var(--text-low);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .kpi .val {
+    font-size: clamp(28px, 3vw, 38px);
+    font-weight: 800;
+    color: var(--text-hi);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .kpi .val .unit {
+    font-size: 14px; color: var(--text-mid);
+    font-weight: 500; margin-right: 4px;
+    letter-spacing: 0;
+  }
+  .kpi .ft {
+    margin-top: 10px;
+    color: var(--text-mid);
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .kpi .ft b { color: var(--teal); font-weight: 600; }
+
+  /* ========== Category section ========== */
+  .category {
+    padding: 80px 0 50px;
+    border-bottom: 1px solid var(--line);
+    scroll-margin-top: calc(var(--topbar-h-desktop) + 20px);
+  }
+  .category[hidden] { display: none; }
+
+  .cat-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 28px;
+    margin-bottom: 38px;
+    padding-bottom: 26px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .cat-tag {
+    color: var(--c, var(--gold));
+    font-size: 11.5px;
+    letter-spacing: 0.28em;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .cat-tag::before {
+    content: ""; display: inline-block;
+    width: 28px; height: 1px;
+    background: var(--c, var(--gold));
+    flex-shrink: 0;
+  }
+  .cat-head h2 {
+    font-size: clamp(24px, 3vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.012em;
+    color: var(--text-hi);
+    line-height: 1.15;
+  }
+  .cat-head p {
+    color: var(--text-mid);
+    font-size: clamp(14px, 1.4vw, 15.5px);
+    line-height: 1.75;
+    max-width: 760px;
+    margin-top: 14px;
+  }
+  .cat-counts {
+    color: var(--text-low);
+    font-size: 13px;
+    text-align: left;
+    line-height: 1.5;
+    flex-shrink: 0;
+  }
+  .cat-counts strong {
+    color: var(--c, var(--gold-soft));
+    font-size: 36px;
+    font-weight: 800;
+    display: block;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+
+  /* ========== Scenario Card ========== */
+  .scenarios {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  .scn {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 26px 28px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .scn::before {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; width: 4px; height: 0;
+    background: var(--c, var(--gold));
+    transition: height .35s ease;
+    border-radius: 0 0 0 4px;
+  }
+  @media (hover: hover) {
+    .scn:hover {
+      border-color: var(--line-mid);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+    .scn:hover::before { height: 80%; }
+  }
+  .scn[hidden] { display: none; }
+
+  .scn-head {
+    display: flex; gap: 14px;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .scn-head > div:first-child { min-width: 0; flex: 1 1 auto; }
+  .scn-meta {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .scn-cat {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--c, var(--gold-soft));
+    padding: 4px 9px;
+    border-radius: 5px;
+    background: color-mix(in srgb, var(--c, var(--gold)) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c, var(--gold)) 22%, transparent);
+    white-space: nowrap;
+  }
+  .scn-id {
+    font-family: "SF Mono", "JetBrains Mono", Menlo, monospace;
+    color: var(--text-very-low);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    direction: ltr;
+  }
+  .scn-id strong { color: var(--text-low); font-weight: 500; }
+  .scn h3 {
+    font-size: clamp(17px, 1.7vw, 21px);
+    font-weight: 700;
+    color: var(--text-hi);
+    line-height: 1.3;
+    letter-spacing: -0.012em;
+    margin-bottom: 4px;
+    overflow-wrap: break-word;
+  }
+
+  .trig {
+    flex-shrink: 0;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 6px 11px;
+    border-radius: 6px;
+    border: 1px solid var(--line-strong);
+    color: var(--gold-soft);
+    background: rgba(212,175,55,.06);
+    white-space: nowrap;
+  }
+  .trig svg { width: 11px; height: 11px; }
+  .trig.scheduled { color: var(--violet); border-color: rgba(184,154,254,.32); background: rgba(184,154,254,.06); }
+  .trig.button { color: var(--orange); border-color: rgba(255,176,104,.32); background: rgba(255,176,104,.06); }
+
+  /* Sections inside card */
+  .scn-section {
+    margin-top: 18px;
+  }
+  .scn-section:first-of-type { margin-top: 4px; }
+  .sec-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--c, var(--gold));
+    margin-bottom: 10px;
+  }
+  .sec-label svg {
+    width: 13px; height: 13px;
+    flex-shrink: 0;
+  }
+
+  .purpose {
+    color: var(--text-hi);
+    font-size: clamp(14.5px, 1.4vw, 15.5px);
+    line-height: 1.65;
+    font-weight: 500;
+    border-right: 2px solid color-mix(in srgb, var(--c, var(--gold)) 50%, transparent);
+    padding-right: 14px;
+  }
+
+  /* Mini flow */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    counter-reset: step;
+    list-style: none;
+    padding: 0;
+  }
+  .step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    counter-increment: step;
+    position: relative;
+  }
+  .step::before {
+    content: counter(step);
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: rgba(212,175,55,.06);
+    border: 1px solid var(--line-strong);
+    color: var(--gold-soft);
+    display: grid; place-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: "SF Mono", monospace;
+  }
+  .step-text {
+    color: var(--text-mid);
+    font-size: clamp(13px, 1.3vw, 14px);
+    line-height: 1.65;
+    padding-top: 3px;
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+  .step-text strong {
+    color: var(--text-hi);
+    font-weight: 600;
+  }
+  .step-text code {
+    font-family: "SF Mono", "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--gold-soft);
+    background: rgba(212,175,55,.05);
+    padding: 1px 6px;
+    border-radius: 4px;
+    direction: ltr;
+    display: inline-block;
+    word-break: break-all;
+  }
+  .step:not(:last-child) { padding-bottom: 4px; }
+  .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 28px; right: 13px; bottom: -8px;
+    width: 1px;
+    background: linear-gradient(180deg, var(--line-strong), transparent);
+  }
+
+  /* Impact */
+  .impact {
+    background: linear-gradient(135deg, rgba(94,231,223,.05), rgba(94,231,223,.02));
+    border: 1px solid rgba(94,231,223,.14);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--teal);
+    font-size: clamp(12.5px, 1.3vw, 13.5px);
+    line-height: 1.65;
+    font-weight: 500;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 18px;
+  }
+  .impact svg {
+    width: 18px; height: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: var(--teal);
+  }
+  .impact strong { color: var(--text-hi); font-weight: 600; }
+  .impact > div { min-width: 0; overflow-wrap: anywhere; }
+
+  /* Footer of card */
+  .scn-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line-soft);
+  }
+  .apps {
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .app {
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    display: grid; place-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--bg-deep);
+    border: 1px solid rgba(0,0,0,.2);
+    box-shadow: 0 2px 6px -2px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.2);
+    cursor: default;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .app[data-tip]:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-deep);
+    border: 1px solid var(--line-strong);
+    color: var(--text-hi);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 9px;
+    border-radius: 5px;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+  }
+  @media (hover: none) {
+    .app[data-tip]:hover::after { display: none; }
+  }
+  .app.powerlink { background: linear-gradient(135deg, #F2D77A, #B8941D); }
+  .app.outlook   { background: linear-gradient(135deg, #6FA8FF, #3D75D9); color: white; }
+  .app.sheets    { background: linear-gradient(135deg, #6BD89D, #2FA15F); color: white; }
+  .app.python    { background: linear-gradient(135deg, #FFD668, #C99520); }
+  .app.http      { background: linear-gradient(135deg, #F08A88, #BB4F4D); color: white; }
+  .app.phone     { background: linear-gradient(135deg, #5EE7DF, #189F97); color: white; }
+  .app.drive     { background: linear-gradient(135deg, #FFB068, #C97A30); color: white; }
+  .app.docs      { background: linear-gradient(135deg, #B89AFE, #7857D9); color: white; }
+  .app.aggregator{ background: linear-gradient(135deg, #B6C4DC, #5C6E92); color: white; }
+
+  .scn-stats {
+    display: flex; gap: 14px;
+    font-size: 11.5px;
+    color: var(--text-low);
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .scn-stats span {
+    display: inline-flex; align-items: center; gap: 5px;
+    white-space: nowrap;
+  }
+  .scn-stats span strong {
+    color: var(--text-hi);
+    font-weight: 700;
+    font-family: "SF Mono", monospace;
+  }
+  .scn-stats span.metric strong { color: var(--gold-soft); }
+  .scn-stats .sep {
+    width: 1px; height: 12px;
+    background: var(--line-mid);
+  }
+
+  /* Featured cards */
+  .scn.featured {
+    grid-column: 1 / -1;
+    background: var(--bg-card-hi);
+    border-color: color-mix(in srgb, var(--c, var(--gold)) 18%, transparent);
+  }
+  .scn.featured h3 { font-size: clamp(19px, 2vw, 24px); }
+  .scn.featured .purpose { font-size: clamp(15px, 1.5vw, 17px); }
+  .scn.featured .step-text { font-size: clamp(13.5px, 1.3vw, 14.5px); }
+
+  /* Code block */
+  .code {
+    background: #050912;
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: "SF Mono", "JetBrains Mono", Menlo, monospace;
+    font-size: 11.5px;
+    line-height: 1.65;
+    color: #C7D2E5;
+    direction: ltr;
+    text-align: left;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: pre;
+    margin-top: 10px;
+    max-width: 100%;
+  }
+  .code .kw { color: #E5C76B; }
+  .code .fn { color: #5EE7DF; }
+  .code .str { color: #F08A88; }
+  .code .com { color: #5C6E92; font-style: italic; }
+
+  /* No results */
+  .empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-low);
+    font-size: 16px;
+  }
+  .empty strong { color: var(--text-hi); display: block; font-size: 22px; margin-bottom: 8px; font-weight: 600; }
+
+  /* Floating "back to top" */
+  .totop {
+    position: fixed;
+    bottom: max(20px, env(safe-area-inset-bottom, 0px) + 16px);
+    left: 20px;
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: rgba(17, 32, 58, 0.92);
+    border: 1px solid var(--line-strong);
+    color: var(--gold-soft);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    cursor: pointer;
+    display: grid; place-items: center;
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+    box-shadow: 0 8px 22px -8px rgba(0,0,0,.5);
+  }
+  .totop.visible { opacity: 1; pointer-events: auto; }
+  .totop:active, .totop:hover { transform: translateY(-3px); }
+  .totop svg { width: 16px; height: 16px; }
+
+  /* Closing */
+  .closing {
+    padding: 90px 0 60px;
+    text-align: center;
+  }
+  .closing h2 {
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 800;
+    margin-bottom: 18px;
+    letter-spacing: -0.022em;
+    line-height: 1.15;
+  }
+  .closing p {
+    color: var(--text-mid);
+    font-size: clamp(15px, 1.6vw, 18px);
+    margin-bottom: 40px;
+    max-width: 760px;
+    margin-right: auto; margin-left: auto;
+    line-height: 1.7;
+  }
+  .badges {
+    display: flex; gap: 10px; justify-content: center;
+    flex-wrap: wrap;
+  }
+  .badge {
+    background: rgba(212,175,55,.06);
+    border: 1px solid var(--line-strong);
+    color: var(--gold-soft);
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-size: 13px; font-weight: 500;
+    white-space: nowrap;
+  }
+
+  footer {
+    padding: 40px 0 max(60px, env(safe-area-inset-bottom, 0) + 30px);
+    color: var(--text-low);
+    font-size: 13px;
+    text-align: center;
+    border-top: 1px solid var(--line);
+    line-height: 1.7;
+  }
+  footer strong { color: var(--gold-soft); }
+  footer .container { padding: 0 20px; }
+
+  /* ============================================================ */
+  /* ====================  RESPONSIVE  ========================== */
+  /* ============================================================ */
+
+  /* Tablet — 1180px */
+  @media (max-width: 1180px) {
+    .topbar-row {
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      padding: 12px 24px;
+    }
+    .topbar-meta { display: none; }
+    .search { max-width: 100%; }
+    .scenarios { grid-template-columns: 1fr; }
+    .kpi-strip { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .container { padding: 0 24px; }
+    .filter-row { padding: 0 24px 12px; }
+    .category { padding: 70px 0 40px; }
+  }
+
+  /* Mobile — 720px */
+  @media (max-width: 720px) {
+    :root { --topbar-h-mobile: 152px; }
+
+    .topbar-row {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 10px 16px;
+    }
+    .brand-mark { width: 34px; height: 34px; font-size: 16px; }
+    .brand { font-size: 14px; }
+    .brand small { font-size: 10px; letter-spacing: 0.04em; }
+    .search-shortcut { display: none; }
+    .search-input { padding: 11px 40px 11px 14px; font-size: 13.5px; }
+
+    /* Filter chips: horizontal scroll */
+    .filter-row {
+      padding: 0 16px 12px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      gap: 6px;
+      mask-image: linear-gradient(90deg, transparent 0, black 12px, black calc(100% - 24px), transparent 100%);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, black 12px, black calc(100% - 24px), transparent 100%);
+    }
+    .filter-row::-webkit-scrollbar { display: none; }
+    .chip {
+      padding: 7px 12px;
+      font-size: 12px;
+      min-height: 32px;
+    }
+    .chip .count { padding: 1px 6px; font-size: 10px; }
+
+    .container { padding: 0 16px; }
+
+    .hero {
+      padding: calc(var(--topbar-h-mobile) + 28px) 0 50px;
+    }
+    .hero-tag {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      padding: 7px 13px;
+      margin-bottom: 22px;
+    }
+    h1 { font-size: clamp(30px, 9vw, 44px); }
+    .hero-sub { font-size: 15px; margin-top: 20px; }
+
+    .kpi-strip {
+      grid-template-columns: 1fr 1fr;
+      gap: 24px 20px;
+      margin-top: 36px;
+      padding-top: 30px;
+    }
+    .kpi .lbl { font-size: 10px; letter-spacing: 0.14em; margin-bottom: 8px; }
+    .kpi .val { font-size: 28px; }
+    .kpi .ft { font-size: 11.5px; }
+
+    .category {
+      padding: 56px 0 30px;
+      scroll-margin-top: calc(var(--topbar-h-mobile) + 12px);
+    }
+    .cat-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      padding-bottom: 22px;
+      margin-bottom: 28px;
+    }
+    .cat-tag {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      margin-bottom: 10px;
+    }
+    .cat-head h2 { font-size: 23px; }
+    .cat-head p { font-size: 14px; line-height: 1.7; }
+    .cat-counts {
+      align-self: flex-start;
+      text-align: right;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .cat-counts strong {
+      font-size: 24px;
+      display: inline-block;
+      margin-bottom: 0;
+    }
+
+    .scn { padding: 22px 20px; border-radius: 16px; }
+    .scn-head { gap: 10px; margin-bottom: 14px; }
+    .scn-meta { gap: 8px; margin-bottom: 6px; }
+    .scn-cat { font-size: 9.5px; padding: 3px 7px; }
+    .scn-id { font-size: 10.5px; }
+    .scn h3 { font-size: 17.5px; }
+    .scn.featured h3 { font-size: 19px; }
+
+    .trig {
+      font-size: 10px;
+      padding: 5px 9px;
+    }
+
+    .scn-section { margin-top: 16px; }
+    .sec-label {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      margin-bottom: 9px;
+    }
+    .purpose {
+      font-size: 14.5px;
+      padding-right: 12px;
+      line-height: 1.6;
+    }
+    .scn.featured .purpose { font-size: 15px; }
+
+    .step { gap: 12px; }
+    .step::before {
+      width: 22px; height: 22px;
+      font-size: 11px;
+    }
+    .step-text { font-size: 13.5px; line-height: 1.6; padding-top: 1px; }
+    .step:not(:last-child)::after {
+      top: 24px; right: 11px;
+    }
+
+    .impact {
+      padding: 12px 14px;
+      font-size: 12.5px;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .impact svg { width: 16px; height: 16px; }
+
+    .scn-foot {
+      gap: 12px;
+      margin-top: 18px;
+      padding-top: 14px;
+    }
+    .scn-stats {
+      gap: 4px 10px;
+      font-size: 11px;
+    }
+    .scn-stats .sep { display: none; }
+    .app { width: 24px; height: 24px; font-size: 10.5px; }
+
+    .code {
+      font-size: 10.5px;
+      padding: 12px 14px;
+    }
+
+    .closing { padding: 70px 0 50px; }
+    .closing h2 { font-size: 26px; }
+    .closing p { font-size: 15px; margin-bottom: 30px; }
+    .badge { font-size: 12px; padding: 8px 16px; }
+    .badges { gap: 8px; }
+
+    footer { font-size: 12px; line-height: 1.8; }
+
+    .totop { width: 42px; height: 42px; left: 16px; }
+  }
+
+  /* Small phone — 420px */
+  @media (max-width: 420px) {
+    .container { padding: 0 14px; }
+    .topbar-row { padding: 10px 14px; }
+    .filter-row { padding: 0 14px 10px; }
+    h1 { font-size: clamp(26px, 8.5vw, 36px); line-height: 1.1; }
+    .kpi-strip { grid-template-columns: 1fr; gap: 22px; }
+    .kpi .val { font-size: 32px; }
+    .kpi .ft { font-size: 12px; }
+    .scn { padding: 20px 18px; }
+    .scn h3 { font-size: 16.5px; }
+    .scn.featured h3 { font-size: 18px; }
+    .scn-head { flex-direction: column; align-items: flex-start; }
+    .trig { align-self: flex-start; }
+    .cat-head h2 { font-size: 21px; }
+    .closing h2 { font-size: 22px; }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Print */
+  @media print {
+    body { background: white; color: black; }
+    .topbar, .totop, .filter-row { display: none !important; }
+    .scn { break-inside: avoid; box-shadow: none; }
+    .hero { padding-top: 30px; }
+  }
+
+  ::selection { background: var(--gold); color: var(--bg-deep); }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(212,175,55,.18); border-radius: 8px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(212,175,55,.32); }
+</style>
+</head>
+<body>
+
+<!-- ===== Top bar ===== -->
+<nav class="topbar">
+  <div class="topbar-row">
+    <div class="brand">
+      <div class="brand-mark">ע</div>
+      <div class="brand-text">
+        עובדה חקירות
+        <small>ספר אוטומציות &middot; v3</small>
+      </div>
+    </div>
+    <div class="search">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
+      <input type="search" id="search" class="search-input" placeholder="חיפוש אוטומציה..." autocomplete="off" autocorrect="off" />
+      <span class="search-shortcut">/</span>
+    </div>
+    <div class="topbar-meta">
+      <strong>34 פעילות</strong>
+      <span>0 שגיאות בייצור</span>
+    </div>
+  </div>
+  <div class="filter-row" id="filters">
+    <button class="chip active" data-cat="all">הכל <span class="count">34</span></button>
+    <button class="chip dot" style="--c: var(--cat-intake);" data-cat="intake">קליטה <span class="count">2</span></button>
+    <button class="chip dot" style="--c: var(--cat-validation);" data-cat="validation">ולידציה <span class="count">10</span></button>
+    <button class="chip dot" style="--c: var(--cat-lifecycle);" data-cat="lifecycle">מחזור חיי תיק <span class="count">7</span></button>
+    <button class="chip dot" style="--c: var(--cat-ops);" data-cat="ops">תפעול <span class="count">3</span></button>
+    <button class="chip dot" style="--c: var(--cat-finance);" data-cat="finance">פיננסים <span class="count">11</span></button>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-tag"><span class="pulse"></span> ספר אוטומציות מלא · גרסה מנהלים</div>
+    <h1>
+      34 אוטומציות.<br/>
+      <span class="accent">המדריך המלא</span> לכל אחת.
+    </h1>
+    <p class="hero-sub">
+      לכל אוטומציה כאן יש כרטיס משלה עם מבנה אחיד: <strong style="color:var(--text-hi);">המטרה</strong> בשורה אחת,
+      <strong style="color:var(--text-hi);">המהלך</strong> צעד-צעד, ו<strong style="color:var(--text-hi);">הערך העסקי</strong> בשפה של מספרים.
+      השתמש בחיפוש או בסינון למעלה כדי לזום על מה שמעניין אותך.
+    </p>
+
+    <div class="kpi-strip">
+      <div class="kpi">
+        <div class="lbl">תרחישים פעילים</div>
+        <div class="val">34<span class="unit">/53</span></div>
+        <div class="ft">34 בייצור, 19 בארכיון/פיתוח</div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">פעולות (30 יום)</div>
+        <div class="val">~28K<span class="unit">ops</span></div>
+        <div class="ft"><b>35%</b> מ-80K — מרווח ×2.8</div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">שגיאות בייצור</div>
+        <div class="val">0.0<span class="unit">%</span></div>
+        <div class="ft">דגימת <b>1,268 ריצות</b> אחרונות</div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">retry handlers</div>
+        <div class="val">200<span class="unit">+</span></div>
+        <div class="ft">3× ניסיונות, על כל קריאה רגישה</div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">קוד Python בייצור</div>
+        <div class="val">7<span class="unit">פונקציות</span></div>
+        <div class="ft">Luhn ID/ח.פ, דרכון, נירמול, Lambda</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- =====================  INTAKE  ====================== -->
+<!-- ===================================================== -->
+<section class="category" id="cat-intake" data-cat="intake" style="--c: var(--cat-intake);">
+  <div class="container">
+    <div class="cat-head">
+      <div>
+        <div class="cat-tag">משפחה 1 / 5 · קליטת לידים</div>
+        <h2>איך טופס הופך לתיק חקירה.</h2>
+        <p>כל הזמנת עבודה חדשה נכנסת דרך הצינור הזה. שני תרחישים שעובדים בטור הופכים שורה בטופס למבנה נתונים מלא ב-CRM — לקוח, נבדקים, מסמכים והכל מקושר נכון.</p>
+      </div>
+      <div class="cat-counts"><strong>2</strong>תרחישים פעילים</div>
+    </div>
+
+    <div class="scenarios">
+
+      <!-- 7259420 -->
+      <article class="scn featured" data-cat="intake" data-keywords="קליטה טופס הזמנה לקוח נבדק 7259420 webhook intake form" style="--c: var(--cat-intake);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">קליטה</span><span class="scn-id"><strong>#7259420</strong></span></div>
+            <h3>קליטת טופס הזמנה ויצירת תיק מלא ב-CRM</h3>
+          </div>
+          <span class="trig">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+            Webhook
+          </span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>המטרה</div>
+          <div class="purpose">להפוך טופס הזמנה מהאתר לתיק חקירה מלא ב-Powerlink — לקוחות, נבדקים, מסמכים — תוך פחות מ-10 שניות, בלי שום הקלדה ידנית.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">קולט את ה-JSON המלא של הטופס: פרטי מזמין, פרטי משלם, עד <strong>3 נבדקים</strong>, ומסמכים מצורפים מ-Drive.</div></li>
+            <li class="step"><div class="step-text">מחפש לקוח קיים <strong>במקביל לפי 3 שדות</strong>: ת.ז/ח.פ, טלפון, מייל. מבדיל בין מסלול "המשלם זהה למזמין" למסלול "שני לקוחות נפרדים".</div></li>
+            <li class="step"><div class="step-text">לקוח שלא נמצא — נוצר חדש; לקוח שנמצא — מקושר. בכל מקרה, מספר הלקוח חוזר אל ההזמנה החדשה.</div></li>
+            <li class="step"><div class="step-text">עובר על כל אחד מהנבדקים בנפרד (1 → 2 → 3), בודק קיום לפי ת.ז או ח.פ, מבדיל בין <strong>אדם פרטי לחברה</strong>, ויוצר/מעדכן.</div></li>
+            <li class="step"><div class="step-text">מוריד את הקבצים המצורפים ב-HTTP, מעלה אותם כקבצים בתיק, ושולח אישור פנימי במייל למשרד.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>חוסך <strong>8–12 דקות עבודה ידנית</strong> לכל הזמנה חדשה ומבטל טעויות הקלדה ב-CRM. המנהל עובר מ"מקליד נתונים" ל"מנהל קשרי לקוחות".</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps">
+            <span class="app powerlink" data-tip="Powerlink CRM">P</span>
+            <span class="app outlook" data-tip="Outlook">O</span>
+            <span class="app http" data-tip="HTTP API">H</span>
+            <span class="app drive" data-tip="File Download">F</span>
+            <span class="app aggregator" data-tip="Aggregator">∑</span>
+          </div>
+          <div class="scn-stats">
+            <span>מודולים <strong>68</strong></span><span class="sep"></span>
+            <span>פילטרים <strong>23</strong></span><span class="sep"></span>
+            <span>ניתובים <strong>11</strong></span><span class="sep"></span>
+            <span class="metric">⌀ <strong>8.4s</strong></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 7259388 -->
+      <article class="scn" data-cat="intake" data-keywords="המרת הזמנה תיק תיוג מהות חקירה 7259388" style="--c: var(--cat-intake);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">קליטה</span><span class="scn-id"><strong>#7259388</strong></span></div>
+            <h3>המרת הזמנת עבודה לתיק חקירה</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לקדם הזמנת עבודה מאושרת לתיק חקירה אמיתי, ולסווג אותה אוטומטית לפי סוג החקירה.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">מקבל סיגנל שהזמנת עבודה אושרה, ושולף את כל פרטי ההזמנה מ-Powerlink.</div></li>
+            <li class="step"><div class="step-text">מחפש <strong>את מהות החקירה באובייקט המוצרים</strong> — קישור שמגדיר את התמחור והסטטוס.</div></li>
+            <li class="step"><div class="step-text">יוצר תיק חדש ב-Powerlink, מקשר אליו את הלקוח, את הנבדקים ואת המוצר.</div></li>
+            <li class="step"><div class="step-text">מאחל את ההזמנה כ"הומרה לתיק" כדי שלא תעובד פעמיים.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>אטומיות מלאה: אין מצב של "תיק שנוצר אבל לא קיבל סוג חקירה". כל תיק יוצא לדרך עם הקשר עסקי מלא.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span><span class="app aggregator" data-tip="Aggregator">∑</span></div>
+          <div class="scn-stats">
+            <span>מודולים <strong>10</strong></span><span class="sep"></span>
+            <span>פילטרים <strong>2</strong></span><span class="sep"></span>
+            <span>retry <strong>9</strong></span><span class="sep"></span>
+            <span class="metric">⌀ <strong>1.4s</strong></span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- ===================  VALIDATION  ==================== -->
+<!-- ===================================================== -->
+<section class="category" id="cat-validation" data-cat="validation" style="--c: var(--cat-validation);">
+  <div class="container">
+    <div class="cat-head">
+      <div>
+        <div class="cat-tag">משפחה 2 / 5 · ולידציה ובדיקת איכות</div>
+        <h2>שומרי הסף של איכות הנתונים.</h2>
+        <p>חברת חקירות חיה ומתה על דיוק. עשרה תרחישים מוודאים שכל ת.ז, ח.פ, דרכון או טלפון שנכנס למערכת הוא תקין — ושלא יוצרים חקירה כפולה על אותו אדם.</p>
+      </div>
+      <div class="cat-counts"><strong>10</strong>תרחישים פעילים</div>
+    </div>
+
+    <div class="scenarios">
+
+      <!-- 1829249 -->
+      <article class="scn featured" data-cat="validation" data-keywords="תעודת זהות luhn ולידציה ת.ז 1829249 python" style="--c: var(--cat-validation);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">ולידציה</span><span class="scn-id"><strong>#1829249</strong></span></div>
+            <h3>בדיקת תקינות תעודת זהות (אלגוריתם Luhn)</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לוודא שכל ת.ז שמוכנסת למערכת היא תקינה לפי האלגוריתם הרשמי, לפני שהיא נכתבת לרשומה.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">מקבל מספר ת.ז עם הקשר: האם זו ת.ז של לקוח או של נבדק.</div></li>
+            <li class="step"><div class="step-text">מודול Python מבצע את <strong>חישוב Luhn הרשמי של מדינת ישראל</strong>: מטפל באורך 7/8/9, מבצע padding ב-0 כשנדרש, ומחשב את ספרת הביקורת.</div></li>
+            <li class="step"><div class="step-text">אם ת.ז תקינה — שדה "ת.ז מאומתת" מסומן ✓. אם לא — נוצרת אוטומטית משימה למשרד עם ה-error המדויק.</div></li>
+            <li class="step"><div class="step-text">המסלול בנוי כך שלקוח ונבדק מטופלים בנתיבים נפרדים — 6 אובייקטים שונים שיכולים להתעדכן.</div></li>
+          </ol>
+          <pre class="code"><span class="com"># הליבה — סכום משוקלל וספרת ביקורת</span>
+<span class="kw">def</span> <span class="fn">is_valid_israeli_id</span>(id9):
+    <span class="kw">return</span> weighted_sum(id9) % 10 == 0</pre>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>מונע פתיחת תיק על ת.ז שגויה — מצב שגרר בעבר חקירות מבוזבזות וזיכויי לקוחות. <strong>שווה אלפי שקלים בשנה</strong>.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app python" data-tip="Python Code">Py</span><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats">
+            <span>מודולים <strong>11</strong></span><span class="sep"></span>
+            <span>פילטרים <strong>8</strong></span><span class="sep"></span>
+            <span>ניתובים <strong>3</strong></span><span class="sep"></span>
+            <span class="metric"><strong>153</strong> ops</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 1829511 -->
+      <article class="scn" data-cat="validation" data-keywords="דרכון passport regex 1829511" style="--c: var(--cat-validation);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">ולידציה</span><span class="scn-id"><strong>#1829511</strong></span></div>
+            <h3>בדיקת תקינות דרכון</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לאמת שכל מספר דרכון שנכנס למערכת תואם לתבנית הרשמית של דרכון ישראלי, לפני שמירה.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">מקבל מספר דרכון, ממיר לאותיות גדולות ומסיר רווחים.</div></li>
+            <li class="step"><div class="step-text">מריץ regex Python: <code>^[A-Z]{1,2}[0-9]{7,8}$</code> — אות אחת או שתיים, ואז 7 או 8 ספרות.</div></li>
+            <li class="step"><div class="step-text">דרכון תקין — שמירה ב-CRM. דרכון לא תקין — מסלול חריגה ולא מזהם את ה-DB.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>מטפל במקרי קצה של נבדקים זרים בלי ת.ז ישראלית. שומר על איכות נתונים גם בקבוצה הזאת.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app python" data-tip="Python">Py</span><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>5</strong></span><span class="sep"></span><span>retry <strong>3</strong></span></div>
+        </div>
+      </article>
+
+      <!-- 1829445 -->
+      <article class="scn" data-cat="validation" data-keywords="ח.פ חברה company id luhn לקוח 1829445" style="--c: var(--cat-validation);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">ולידציה</span><span class="scn-id"><strong>#1829445</strong></span></div>
+            <h3>בדיקת תקינות ח.פ של לקוח</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לאמת שמספר חברה שלקוח הזין הוא ח.פ ישראלי תקין — גם בתבנית וגם בספרת הביקורת.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">מקבל מספר ח.פ, בודק שהוא 6–9 ספרות, ומבצע padding ל-9.</div></li>
+            <li class="step"><div class="step-text">קוד Python מאמת ש<strong>הספרה הראשונה היא 5 (חברה בע"מ), 7 או 9 (עמותה/שותפות)</strong>.</div></li>
+            <li class="step"><div class="step-text">מריץ ספרת ביקורת Luhn זהה לזו של ת.ז.</div></li>
+            <li class="step"><div class="step-text">תוצאה תקינה → שמירה. תוצאה שגויה → משימה לבדיקה ידנית.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>הגנה משפטית: לקוח עם ח.פ שגוי לא יוכל לטעון שההזמנה אינה רשמית.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app python" data-tip="Python">Py</span><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>5</strong></span><span class="sep"></span><span>פילטרים <strong>2</strong></span><span class="sep"></span><span>retry <strong>3</strong></span></div>
+        </div>
+      </article>
+
+      <!-- 2694060 -->
+      <article class="scn" data-cat="validation" data-keywords="ח.פ נבדק חברה 2694060" style="--c: var(--cat-validation);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">ולידציה</span><span class="scn-id"><strong>#2694060</strong></span></div>
+            <h3>בדיקת תקינות ח.פ של נבדק</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">תאום של ולידציית ח.פ הלקוח, אבל פועל על אובייקט הנבדק. כל חברה שנחקרת עוברת את אותו רף איכות.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">אותו אלגוריתם Python (תבנית + ספרת ביקורת) שרץ ב-#1829445.</div></li>
+            <li class="step"><div class="step-text">נתיב הכתיבה ל-Powerlink אחר: שדות באובייקט "נבדק" במקום "לקוח".</div></li>
+            <li class="step"><div class="step-text">הפרדה מכוונת — אם תידרש בעתיד לוגיקה שונה לאחד מהאובייקטים, אפשר בלי לסכן את השני.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>חברות נחקרות עוברות אותו תהליך ולידציה כמו לקוחות — אין פערים באיכות הנתונים בין סוגי האובייקטים.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app python" data-tip="Python">Py</span><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>6</strong></span><span class="sep"></span><span>פילטרים <strong>2</strong></span><span class="sep"></span><span>retry <strong>3</strong></span></div>
+        </div>
+      </article>
+
+      <!-- 1947282 -->
+      <article class="scn" data-cat="validation" data-keywords="טלפון phone נירמול validation 1947282" style="--c: var(--cat-validation);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">ולידציה</span><span class="scn-id"><strong>#1947282</strong></span></div>
+            <h3>נירמול ובדיקה של מספרי טלפון</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">להמיר כל פורמט של מספר טלפון ישראלי לפורמט בינלאומי אחיד, ולסמן מספרים לא תקינים.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">מקבל מספר בכל פורמט: <code>050-1234567</code> · <code>+972-50-1234567</code> · <code>0501234567</code>.</div></li>
+            <li class="step"><div class="step-text">מודול PhoneNumber Transformer בודק תקינות לפי תקן E.164 עם ברירת מחדל IL.</div></li>
+            <li class="step"><div class="step-text">תקין → שומר את הפורמט המנורמל בשדה הטלפון. לא תקין → יוצר משימה ללא לזרוק שגיאה.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>חיפוש כפילויות וזיהוי לקוח לפי טלפון עובדים על מחרוזת אחת אחידה. סוף לבעיית "אותו לקוח עם 3 פורמטים שונים".</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app phone" data-tip="Phone Parser">☎</span><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>6</strong></span><span class="sep"></span><span>retry <strong>5</strong></span><span class="sep"></span><span class="metric"><strong>151</strong> ops</span></div>
+        </div>
+      </article>
+
+      <!-- 1944452 -->
+      <article class="scn featured" data-cat="validation" data-keywords="כפילות נבדק duplicate dedup 1944452" style="--c: var(--cat-validation);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">ולידציה</span><span class="scn-id"><strong>#1944452</strong></span></div>
+            <h3>בדיקת כפילויות של נבדקים — מנוע 4 מסלולים</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לחסום פתיחת חקירה על נבדק שכבר קיים במערכת — לא משנה איך הוא הוכנס בפעם הקודמת (ת.ז, דרכון, ח.פ או רק טלפון).</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">מקבל את פרטי הנבדק החדש ומנתב לאחד מ-4 מסלולים לפי <strong>סוג הישות</strong>: אדם פרטי עם ת.ז · אדם עם דרכון בלבד · אדם בלי שום מזהה רשמי · חברה/עמותה/הקדש.</div></li>
+            <li class="step"><div class="step-text">בכל מסלול — שאילתה ראשית מול Powerlink לפי המזהה הרשמי המתאים.</div></li>
+            <li class="step"><div class="step-text">אם לא נמצאה התאמה — נופל לחיפוש <strong>fallback לפי טלפון</strong>, כי הרבה כפילויות מתגלות דווקא דרך טלפון משותף.</div></li>
+            <li class="step"><div class="step-text">נמצאה כפילות — נוצרת משימת התראה במשרד עם פרטי הנבדק הקיים והקישור לחקירה הקודמת.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>חוסם הוצאה מיותרת על חקירה כפולה. <strong>חיסכון ישיר של מאות ש״ח לכל מקרה שנחסם</strong>, ושיפור באיכות הדאטה לאורך זמן.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>17</strong></span><span class="sep"></span><span>פילטרים <strong>12</strong></span><span class="sep"></span><span>ניתובים <strong>4</strong></span><span class="sep"></span><span class="metric"><strong>111</strong> ops</span></div>
+        </div>
+      </article>
+
+      <!-- 4504335 -->
+      <article class="scn" data-cat="validation" data-keywords="כפילות אנשי קשר contacts 4504335" style="--c: var(--cat-validation);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">ולידציה</span><span class="scn-id"><strong>#4504335</strong></span></div>
+            <h3>בדיקת כפילות של אנשי קשר</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לזהות איש קשר חדש שכבר קיים במערכת — בלי להתבלבל עם כפילות של לקוח (חברה).</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">מקבל פרטי איש קשר חדש: ת.ז, טלפון ומייל.</div></li>
+            <li class="step"><div class="step-text">מבצע 3 חיפושים מקבילים ב-Powerlink — לפי כל אחד מהשדות.</div></li>
+            <li class="step"><div class="step-text">אם נמצאה התאמה באחד מהם — איש הקשר נצרף לרשומה הקיימת. אחרת — נוצר חדש.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>איש קשר חדש בארגון לקוח קיים לא יוצר ארגון כפול. שומר על מבנה היררכי נקי בין לקוח עסקי לבעלי תפקידים.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>7</strong></span><span class="sep"></span><span>פילטרים <strong>4</strong></span><span class="sep"></span><span>retry <strong>5</strong></span></div>
+        </div>
+      </article>
+
+      <!-- 1944573 -->
+      <article class="scn" data-cat="validation" data-keywords="כפילות פעולה תקופה זמן 1944573 python" style="--c: var(--cat-validation);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">ולידציה</span><span class="scn-id"><strong>#1944573</strong></span></div>
+            <h3>בדיקת פעולה כפולה לפי טווח זמן</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לחסום מצב של "ביצענו את אותו איתור על אותו נבדק לפני זמן קצר" — חיסכון בעלות חקירה מיותרת.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">בכל פעולה חדשה — שולף את כל הפעולות הקיימות על אותו נבדק עם אותה מהות חקירה.</div></li>
+            <li class="step"><div class="step-text"><strong>קוד Python ייעודי</strong> מחשב את הפרש החודשים בין תאריכי הפעולות באמצעות <code>relativedelta</code>.</div></li>
+            <li class="step"><div class="step-text">אם הפרש החודשים נמוך מסף שהוגדר — מסומן ככפילות, ונוצרת משימת התראה במשרד.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>אם לקוח לא הסתכל על דו"ח קודם — האוטומציה מציפה אותו ושומרת על שלושת הצדדים: לקוח, עובדה, ואיכות נתונים.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app python" data-tip="Python">Py</span><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>8</strong></span><span class="sep"></span><span>פילטרים <strong>5</strong></span><span class="sep"></span><span>retry <strong>7</strong></span><span class="sep"></span><span class="metric"><strong>178</strong> ops</span></div>
+        </div>
+      </article>
+
+      <!-- 5958684 -->
+      <article class="scn" data-cat="validation" data-keywords="עדכון תז נבדק סנכרון 5958684" style="--c: var(--cat-validation);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">ולידציה</span><span class="scn-id"><strong>#5958684</strong></span></div>
+            <h3>סנכרון ת.ז על פעולות קשורות</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">כשמתקנים ת.ז על נבדק במסך הפעולה — לעדכן בעקבות זה את כל הפעולות הקשורות אוטומטית.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">טריגר מתעורר ברגע שמשתמש מעדכן ת.ז.</div></li>
+            <li class="step"><div class="step-text">שולף את כל הפעולות שעל אותו נבדק.</div></li>
+            <li class="step"><div class="step-text">עדכון ת.ז בכל אחת מהן בלולאה.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>סנכרון אוטומטי חוצה-אובייקטים. דוחות שמתבססים על ת.ז יישארו עקביים.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>3</strong></span><span class="sep"></span><span>retry <strong>2</strong></span><span class="sep"></span><span class="metric"><strong>150</strong> ops</span></div>
+        </div>
+      </article>
+
+      <!-- 5958868 -->
+      <article class="scn" data-cat="validation" data-keywords="עדכון תז מתוך נבדק סנכרון 5958868" style="--c: var(--cat-validation);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">ולידציה</span><span class="scn-id"><strong>#5958868</strong></span></div>
+            <h3>סנכרון ת.ז כשמעדכנים מצד הנבדק</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">תאום של #5958684, אבל עם טריגר הפוך: כשמתקנים את הנבדק עצמו (ולא מתוך הפעולה) — לעדכן את הפעולות.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">טריגר על שינוי ת.ז ברשומת הנבדק.</div></li>
+            <li class="step"><div class="step-text">איתור הפעולות הקשורות באמצעות שאילתה.</div></li>
+            <li class="step"><div class="step-text">עדכון מקבילי בכל הפעולות.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>סוגר את כל הפערים: לא משנה איפה משתמשי המשרד מעדכנים — הסנכרון קורה בכל מקרה.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>3</strong></span><span class="sep"></span><span>פילטרים <strong>1</strong></span><span class="sep"></span><span>retry <strong>2</strong></span></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- ====================  LIFECYCLE  ==================== -->
+<!-- ===================================================== -->
+<section class="category" id="cat-lifecycle" data-cat="lifecycle" style="--c: var(--cat-lifecycle);">
+  <div class="container">
+    <div class="cat-head">
+      <div>
+        <div class="cat-tag">משפחה 3 / 5 · מחזור חיי תיק ופעולה</div>
+        <h2>מה קורה בין יצירה לסגירה.</h2>
+        <p>שבעה תרחישים שמובילים את התיק והפעולה דרך כל שלביהם — קישורים אוטומטיים, חישובי תאריכי יעד, ובדיקה אגרגטיבית לפני שתיק נסגר.</p>
+      </div>
+      <div class="cat-counts"><strong>7</strong>תרחישים פעילים</div>
+    </div>
+
+    <div class="scenarios">
+
+      <!-- 6038384 -->
+      <article class="scn" data-cat="lifecycle" data-keywords="קישור נבדקים תיק 6038384" style="--c: var(--cat-lifecycle);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">מחזור חיים</span><span class="scn-id"><strong>#6038384</strong></span></div>
+            <h3>קישור עד 5 נבדקים לפעולה חדשה</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לוודא שכל פעולה חדשה שנפתחת בתיק מקבלת אוטומטית את כל הנבדקים שמופיעים באותו תיק.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">פעולה חדשה דרך מסך התיק — מקבלים את ה-recordid של התיק.</div></li>
+            <li class="step"><div class="step-text">שאילתה ל-Powerlink לשליפת כל הנבדקים המקושרים לתיק.</div></li>
+            <li class="step"><div class="step-text">ניתוב בעל 5 ענפים — אחד לכל מיקום נבדק (1, 2, 3, 4, 5), עם פילטר exists לכל אחד.</div></li>
+            <li class="step"><div class="step-text">עדכון מקבילי של עד 5 שדות נבדק על הפעולה החדשה.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>החוקר מקבל את כל ההקשר ביצירת הפעולה — אין צורך לחפש ידנית מי הם הנבדקים.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>8</strong></span><span class="sep"></span><span>פילטרים <strong>6</strong></span><span class="sep"></span><span>retry <strong>5</strong></span></div>
+        </div>
+      </article>
+
+      <!-- 1851243 -->
+      <article class="scn" data-cat="lifecycle" data-keywords="חוקר נבדק קישור 1851243" style="--c: var(--cat-lifecycle);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">מחזור חיים</span><span class="scn-id"><strong>#1851243</strong></span></div>
+            <h3>הצמדת חוקר לנבדק (זיכרון ארגוני)</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לשמור על המשכיות שירות — אותו חוקר ימשיך לטפל בנבדק שהוא כבר מכיר מהפעם הקודמת.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">פעולה חדשה נוצרה — שולפים את החוקר המוקצה.</div></li>
+            <li class="step"><div class="step-text">מעדכנים את אובייקט הנבדק עם <strong>"חוקר אחרון"</strong>, כך שהפעם הבאה — אותו חוקר מקבל את החקירה אוטומטית.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>החוקר משמר את הידע הצבור — חוסך לו זמן ולנבדק חוויה אחידה.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>2</strong></span><span class="sep"></span><span>retry <strong>2</strong></span></div>
+        </div>
+      </article>
+
+      <!-- 2061508 -->
+      <article class="scn" data-cat="lifecycle" data-keywords="דחיפות תאריך יעד 2061508" style="--c: var(--cat-lifecycle);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">מחזור חיים</span><span class="scn-id"><strong>#2061508</strong></span></div>
+            <h3>חישוב דדליין לפי רמת דחיפות</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לכל פעולה חדשה — לקבוע את תאריך היעד שלה אוטומטית לפי רמת הדחיפות שהוגדרה.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">Powerlink מבצע את חישוב הדדליין בעצמו (יום פלוס X לפי הדחיפות) ושולח לתרחיש.</div></li>
+            <li class="step"><div class="step-text">התרחיש כותב חזרה את התאריך לשדה היעד באובייקט הפעולה.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>תאריכי דדליין נכנסים אוטומטית. סוף ל"שכחנו לעדכן את התאריך" — והבסיס למנוע ההתראות פעולה.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>2</strong></span><span class="sep"></span><span>retry <strong>2</strong></span></div>
+        </div>
+      </article>
+
+      <!-- 1963533 -->
+      <article class="scn" data-cat="lifecycle" data-keywords="תאריכי סטטוס הזמנה 1963533" style="--c: var(--cat-lifecycle);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">מחזור חיים</span><span class="scn-id"><strong>#1963533</strong></span></div>
+            <h3>חותמת זמן אוטומטית בכל שינוי סטטוס הזמנה</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לכל מעבר בין סטטוסים בהזמנה — לרשום אוטומטית את התאריך שבו זה קרה, בשדה ייעודי.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">שינוי סטטוס מפעיל את התרחיש עם הסטטוס החדש.</div></li>
+            <li class="step"><div class="step-text">מודול <code>util:Switcher</code> ממפה: "אושרה" → "תאריך אישור"; "בביצוע" → "תאריך תחילת ביצוע"; "הושלמה" → "תאריך השלמה".</div></li>
+            <li class="step"><div class="step-text">עדכון של השדה המתאים בלבד.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>BI ודוחות SLA מקבלים ציר זמן מדויק של הזמנה — בלי תלות בזיכרון אנושי.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>3</strong></span><span class="sep"></span><span>פילטרים <strong>1</strong></span><span class="sep"></span><span>retry <strong>3</strong></span></div>
+        </div>
+      </article>
+
+      <!-- 1617605 -->
+      <article class="scn" data-cat="lifecycle" data-keywords="תאריכי סטטוס פעולה 1617605" style="--c: var(--cat-lifecycle);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">מחזור חיים</span><span class="scn-id"><strong>#1617605</strong></span></div>
+            <h3>חותמת זמן בכל שינוי סטטוס פעולה</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">תאום של #1963533, אבל ברמת הפעולה — לרשום מתי הפעולה נשלחה לחוקר, מתי הוקצתה, ומתי הסתיימה.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">שינוי סטטוס פעולה — שולפים מ-Powerlink את ההקשר המלא.</div></li>
+            <li class="step"><div class="step-text">ניתוב Router לפי הסטטוס החדש: שולח לכל מסלול את הלוגיקה המתאימה.</div></li>
+            <li class="step"><div class="step-text">Switcher בכל מסלול בוחר את שדה התאריך הנכון, ומבצע את העדכון.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>ציר זמן מלא של פעולה — בסיס למדידת ביצועי חוקרים ולחישוב SLA.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>6</strong></span><span class="sep"></span><span>פילטרים <strong>3</strong></span><span class="sep"></span><span>retry <strong>3</strong></span></div>
+        </div>
+      </article>
+
+      <!-- 5782292 -->
+      <article class="scn" data-cat="lifecycle" data-keywords="הדפסה הגהה זיווה 5782292" style="--c: var(--cat-lifecycle);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">מחזור חיים</span><span class="scn-id"><strong>#5782292</strong></span></div>
+            <h3>פתיחת משימת הגהה במעבר ל"בתהליך הדפסה"</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לוודא שכל תיק שיוצא להדפסה — מקבל אוטומטית משימת הגהה לעובדת המשרד שאחראית לכך.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">תיק עובר לסטטוס "בתהליך הדפסה" — מתעורר טריגר.</div></li>
+            <li class="step"><div class="step-text">שולפים את פרטי התיק והאחראי הקבוע על ההגהה.</div></li>
+            <li class="step"><div class="step-text">יוצרים אובייקט משימה ב-Powerlink עם המוטב, התיק, וסוג המשימה.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>אין יותר "תיק שיצא להגהה ונשכח שם". כל תיק נמצא בעין של מישהו ספציפי.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>3</strong></span><span class="sep"></span><span>retry <strong>2</strong></span></div>
+        </div>
+      </article>
+
+      <!-- 6499060 + 7106829 -->
+      <article class="scn featured" data-cat="lifecycle" data-keywords="סגירת תיק lambda python אגרגציה 6499060 7106829" style="--c: var(--cat-lifecycle);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">מחזור חיים</span><span class="scn-id"><strong>#6499060 + #7106829</strong></span></div>
+            <h3>סגירת תיק חכמה — בודק לבד שכל הפעולות סגורות</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">למנוע מצב של "תיק שנסגר אבל יש בו פעולות פתוחות" — שגרר בעבר חיובים חסרים ולקוחות מאוכזבים.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">משתמש מנסה לסגור תיק. הטריגר רץ <strong>לפני שהסגירה תקפה</strong>.</div></li>
+            <li class="step"><div class="step-text">התרחיש שולף את כל הפעולות בתיק ומאסף את הסטטוסים שלהן למחרוזת CSV.</div></li>
+            <li class="step"><div class="step-text">שולח את ה-CSV לפונקציית Lambda ייעודית (#7106829) — webhook נפרד שכל ייעודו לבדיקה הזאת.</div></li>
+            <li class="step"><div class="step-text">ה-Lambda — <strong>קוד Python</strong> — מנרמל מקפים יוניקודיים ורווחים, ואז מוודא שכל סטטוס נמצא ב-allow-list הסגור.</div></li>
+            <li class="step"><div class="step-text">אם yes — הסגירה אושרה. אם no — התיק נשאר פתוח, והמשתמש מקבל הודעה שיש פעולות שלא הסתיימו.</div></li>
+          </ol>
+          <pre class="code"><span class="com"># Lambda — ה-allow-list של סטטוסים סופיים</span>
+ALLOWED = {
+    <span class="str">"פעולה סגורה - הושלמה"</span>,
+    <span class="str">"בוטל"</span>,
+    <span class="str">"ללא תוצאות"</span>,
+    <span class="str">"ממצאים שגויים"</span>,
+}</pre>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>שומר על שלמות התהליך הפיננסי. <strong>תיק לא יכול להיסגר בלי שכל הצדדים שולמו וכל הדו"חות נמסרו</strong>.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps">
+            <span class="app python" data-tip="Python Lambda">Py</span>
+            <span class="app powerlink" data-tip="Powerlink">P</span>
+            <span class="app http" data-tip="HTTP / Lambda">H</span>
+          </div>
+          <div class="scn-stats"><span>מודולים <strong>9</strong></span><span class="sep"></span><span>retry <strong>5</strong></span><span class="sep"></span><span class="metric"><strong>355</strong> ops</span></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- =======================  OPS  ======================= -->
+<!-- ===================================================== -->
+<section class="category" id="cat-ops" data-cat="ops" style="--c: var(--cat-ops);">
+  <div class="container">
+    <div class="cat-head">
+      <div>
+        <div class="cat-tag">משפחה 4 / 5 · תפעול חוקרים</div>
+        <h2>איך החוקרים בשטח מנוהלים מרחוק.</h2>
+        <p>שלושה תרחישים שהופכים את ניהול עשרות חקירות פעילות במקביל למערכת חיה — לכל חוקר, לכל סוג חקירה, לכל יום שנשאר עד הדדליין.</p>
+      </div>
+      <div class="cat-counts"><strong>3</strong>תרחישים פעילים</div>
+    </div>
+
+    <div class="scenarios">
+
+      <!-- 6382855 -->
+      <article class="scn featured" data-cat="ops" data-keywords="התראות חוקרים שיוך מחדש מנוע 6382855" style="--c: var(--cat-ops);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">תפעול</span><span class="scn-id"><strong>#6382855</strong></span></div>
+            <h3>מנוע התראות חוקרים — 16 תבניות מייל מותאמות</h3>
+          </div>
+          <span class="trig scheduled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            Scheduled
+          </span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">להוציא לכל חוקר, יום-יום, את ההתראות הספציפיות שצריך — לא הצפת inbox של כולם בכל החקירות.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">רץ מתוזמן יום-יום ושואב את כל החקירות הפתוחות.</div></li>
+            <li class="step"><div class="step-text">10 ניתובי Router מסננים <strong>לפי סוג החקירה</strong>: איתור עיסוק / איתור מען / כתובת / וכו'.</div></li>
+            <li class="step"><div class="step-text">בכל ניתוב — סינון נוסף <strong>לפי שם החוקר</strong>: אבי ברקוביץ׳ · ברק אורן · דניאל אזימוב · זיוה.</div></li>
+            <li class="step"><div class="step-text">פילטר נוסף <strong>לפי מספר ימי הדדליין</strong> שנותרו: 1, 2, 3, 4, 8, 9 או 10 ימים — לכל קומבינציה תבנית מייל אחרת.</div></li>
+            <li class="step"><div class="step-text">סה"כ <strong>16 הודעות מייל מותאמות אישית</strong> נשלחות ב-Outlook לחוקרים הרלוונטיים בלבד.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>חוקרים מקבלים את ההודעה הנכונה ברגע הנכון. <strong>שיפור משמעותי באחוזי עמידה בלוחות זמנים</strong> — והרבה פחות תסכול שטח.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps">
+            <span class="app powerlink" data-tip="Powerlink">P</span>
+            <span class="app outlook" data-tip="Outlook">O</span>
+            <span class="app http" data-tip="HTTP">H</span>
+          </div>
+          <div class="scn-stats"><span>מודולים <strong>32</strong></span><span class="sep"></span><span>פילטרים <strong>25</strong></span><span class="sep"></span><span>ניתובים <strong>10</strong></span><span class="sep"></span><span class="metric"><strong>2,321</strong> ops</span></div>
+        </div>
+      </article>
+
+      <!-- 5856687 -->
+      <article class="scn" data-cat="ops" data-keywords="דדליין חריגה התראה 5856687" style="--c: var(--cat-ops);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">תפעול</span><span class="scn-id"><strong>#5856687</strong></span></div>
+            <h3>סנטינל דדליין — שולח התראה על חריגות</h3>
+          </div>
+          <span class="trig scheduled"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Scheduled</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לזהות חקירות שעברו את הדדליין שלהן ולא נסגרו — ולהתריע אישית למוטבים הרלוונטיים.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">רץ יום-יום, סורק את כל החקירות הפתוחות.</div></li>
+            <li class="step"><div class="step-text">פילטר תאריך: <code>formatDate(deadline) &lt; formatDate(now)</code> — רק חקירות שעברו את הדדליין.</div></li>
+            <li class="step"><div class="step-text">בונה דינמית טקסט הודעה לכל חקירה: שם הנבדק, תאריך הדדליין, ימי איחור.</div></li>
+            <li class="step"><div class="step-text">שולח ב-Outlook לרשימה קבועה של מוטבים: משה רוזן · נץ שירותים משפטיים · מיכל כהן.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>תאורת חירום שעובדת בלי מתערב אנושי. הסיכוי שחקירה תיפול בין הכיסאות פוחת משמעותית.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps">
+            <span class="app powerlink" data-tip="Powerlink">P</span>
+            <span class="app outlook" data-tip="Outlook">O</span>
+          </div>
+          <div class="scn-stats"><span>מודולים <strong>6</strong></span><span class="sep"></span><span>פילטרים <strong>3</strong></span><span class="sep"></span><span>retry <strong>4</strong></span><span class="sep"></span><span class="metric"><strong>960</strong> ops</span></div>
+        </div>
+      </article>
+
+      <!-- 2370227 -->
+      <article class="scn" data-cat="ops" data-keywords="שליחת חקירה לחוקר send investigator inbox 2370227" style="--c: var(--cat-ops);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">תפעול</span><span class="scn-id"><strong>#2370227</strong></span></div>
+            <h3>שליחת חקירה לחוקר — פלואו עם תיעוד מלא</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לשלוח חקירה לחוקר במייל ולתעד את שליחתה ב-CRM — כך שכל ההתכתבות נמצאת במקום אחד.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">משתמש לוחץ על כפתור "שלח חקירה לחוקר". מתעורר טריגר.</div></li>
+            <li class="step"><div class="step-text">שולף <strong>במקביל</strong>: הפעולה, החוקר, התיק, הנבדק, והמשתמש שלוחץ.</div></li>
+            <li class="step"><div class="step-text">אם יש מייל לחוקר — שולח את החקירה ב-Outlook עם כל הפרטים.</div></li>
+            <li class="step"><div class="step-text">מעדכן את סטטוס הפעולה ל"נשלח לחוקר" ומוסיף הערה היסטורית בתיק.</div></li>
+            <li class="step"><div class="step-text">מחפש את ההודעה הנשלחת באובייקט inbox של ה-CRM ו<strong>מקשר אותה לתיק</strong>.</div></li>
+            <li class="step"><div class="step-text">אם אין מייל לחוקר — שולח התראה למשרד עם השגיאה.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>אין יותר "מי שלח לו את זה?". כל ההיסטוריה התקשורתית עם החוקר נמצאת בתיק ומסונכרנת.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps">
+            <span class="app powerlink" data-tip="Powerlink">P</span>
+            <span class="app outlook" data-tip="Outlook">O</span>
+          </div>
+          <div class="scn-stats"><span>מודולים <strong>14</strong></span><span class="sep"></span><span>פילטרים <strong>3</strong></span><span class="sep"></span><span>retry <strong>12</strong></span></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- =====================  FINANCE  ===================== -->
+<!-- ===================================================== -->
+<section class="category" id="cat-finance" data-cat="finance" style="--c: var(--cat-finance);">
+  <div class="container">
+    <div class="cat-head">
+      <div>
+        <div class="cat-tag">משפחה 5 / 5 · פיננסים וחיוב</div>
+        <h2>הלולאה הסגורה של הכסף.</h2>
+        <p>11 תרחישים שמנהלים את כל הצד הפיננסי כלולאה אחת: תמחור דינמי לפי לקוח, הפקת חשבוניות במקליק, מעקב אוטומטי, וסגירה כשהקבלה מופקה. כולל חישוב תשלום לחוקרים והפקת דו"חות.</p>
+      </div>
+      <div class="cat-counts"><strong>11</strong>תרחישים פעילים</div>
+    </div>
+
+    <div class="scenarios">
+
+      <!-- 8896622 -->
+      <article class="scn featured" data-cat="finance" data-keywords="חשבונית מס קבלה הפקה python aggregator 8896622" style="--c: var(--cat-finance);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">פיננסים</span><span class="scn-id"><strong>#8896622</strong></span></div>
+            <h3>הפקת חשבונית מס/קבלה אגרגטיבית</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">להפיק חשבונית מס/קבלה אחת שמסכמת אוטומטית את כל החשבוניות עסקה הפתוחות של הלקוח — תהליך שלקח רואה חשבון 15+ דקות עבודה ידנית.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">מקבל recordid של לקוח. שולף במקביל את הלקוח, את הקבלות הקיימות, ואת כל החשבוניות עסקה הפתוחות.</div></li>
+            <li class="step"><div class="step-text">קוד <strong>Python ראשון</strong> מסנן אילו חשבוניות זכאיות להיכלל בקבלה הזאת (מסיר כפולים, בוחר תאריכים).</div></li>
+            <li class="step"><div class="step-text">לולאה (Feeder) רצה על כל חשבונית זכאית, שולפת את הפריטים שלה, ומאספת אותם.</div></li>
+            <li class="step"><div class="step-text">קוד <strong>Python שני</strong> בונה את ה-JSON הסופי בפורמט שדורש API החיוב.</div></li>
+            <li class="step"><div class="step-text">קריאה אחת ל-API להפקת הקבלה בפועל.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div><strong>15 דקות → 25 שניות</strong>. דיוק מלא בכל פריט, ללא טעויות העתקה. שווה ערך לשעות הנהלת חשבונות בכל חודש.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps">
+            <span class="app python" data-tip="Python (×2)">Py</span>
+            <span class="app powerlink" data-tip="Powerlink">P</span>
+            <span class="app http" data-tip="HTTP">H</span>
+            <span class="app aggregator" data-tip="Aggregator">∑</span>
+          </div>
+          <div class="scn-stats"><span>מודולים <strong>20</strong></span><span class="sep"></span><span>retry <strong>10</strong></span><span class="sep"></span><span class="metric"><strong>4,747</strong> ops</span></div>
+        </div>
+      </article>
+
+      <!-- 6533713 -->
+      <article class="scn featured" data-cat="finance" data-keywords="תמחור דינמי מחירון בנקים sheets 6533713" style="--c: var(--cat-finance);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">פיננסים</span><span class="scn-id"><strong>#6533713</strong></span></div>
+            <h3>תמחור דינמי לפי לקוח — מנוע "מחירון בנקים"</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לכל פעולה חדשה — לקבוע אוטומטית את המחיר הנכון לפי הלקוח (מזמין או משלם), בלי שמישהו יחשב ידנית.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">פעולה חדשה נוצרה. הטריגר שולח את שם הלקוח המזמין ו/או המשלם.</div></li>
+            <li class="step"><div class="step-text">ניתוב בעל 4 ענפים: יש שניהם / רק מזמין / רק משלם / לא נמצא ב-Sheet.</div></li>
+            <li class="step"><div class="step-text">חיפוש שורה ב-Google Sheet "מחירון בנקים" לפי שם הלקוח. אם לא נמצא לפי מזמין — נופל לחיפוש לפי משלם.</div></li>
+            <li class="step"><div class="step-text">חיפוש שני: מציאת המחיר הספציפי של סוג החקירה בעמודה המתאימה.</div></li>
+            <li class="step"><div class="step-text">עדכון שדה "מחיר" בפעולה ב-Powerlink.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>גמישות מלאה לעסק: <strong>מנהלי המשרד מעדכנים מחירים פר לקוח ב-Sheets — בלי פיתוח</strong>. ובתוך זה — הגנה מפני הפסדי הכנסה.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps">
+            <span class="app powerlink" data-tip="Powerlink">P</span>
+            <span class="app sheets" data-tip="Google Sheets">S</span>
+            <span class="app http" data-tip="HTTP">H</span>
+          </div>
+          <div class="scn-stats"><span>מודולים <strong>15</strong></span><span class="sep"></span><span>פילטרים <strong>11</strong></span><span class="sep"></span><span>ניתובים <strong>2</strong></span><span class="sep"></span><span class="metric"><strong>205</strong> ops</span></div>
+        </div>
+      </article>
+
+      <!-- 2654445 -->
+      <article class="scn" data-cat="finance" data-keywords="כפתור חשבונית עסקה button 2654445" style="--c: var(--cat-finance);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">פיננסים</span><span class="scn-id"><strong>#2654445</strong></span></div>
+            <h3>הפקת חשבונית עסקה דרך כפתור</h3>
+          </div>
+          <span class="trig button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z" fill="currentColor"/></svg>
+            Button
+          </span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לחיצה אחת על כפתור במסך התיק → חשבונית עסקה מופקה אוטומטית עם כל הפעולות.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">לחיצה על "הפק חשבונית עסקה" → טריגר עם recordid של התיק.</div></li>
+            <li class="step"><div class="step-text">שולף את התיק והלקוח, מוודא ששניהם קיימים.</div></li>
+            <li class="step"><div class="step-text">מושך את כל הפעולות בתיק, אוסף אותן ל-JSON אחד עם הפריטים והסכומים.</div></li>
+            <li class="step"><div class="step-text">קורא ל-API החיוב ויוצר את החשבונית.</div></li>
+            <li class="step"><div class="step-text"><strong>בנוסף</strong> — מסמן את כל המשימות הקשורות בתיק כ"הושלמו".</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>חיוב במקליק. מבטיח שכל פעולה בתיק נכנסה לחשבונית — אין יותר "שכחנו לחייב על משהו".</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span><span class="app http" data-tip="HTTP">H</span><span class="app aggregator" data-tip="JSON Builder">∑</span></div>
+          <div class="scn-stats"><span>מודולים <strong>14</strong></span><span class="sep"></span><span>פילטרים <strong>6</strong></span><span class="sep"></span><span>retry <strong>13</strong></span><span class="sep"></span><span class="metric"><strong>714</strong> ops</span></div>
+        </div>
+      </article>
+
+      <!-- 2734704 -->
+      <article class="scn" data-cat="finance" data-keywords="חשבונית אגרות 2734704" style="--c: var(--cat-finance);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">פיננסים</span><span class="scn-id"><strong>#2734704</strong></span></div>
+            <h3>הפקת חשבונית אגרות (זרם חיוב נפרד)</h3>
+          </div>
+          <span class="trig button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z" fill="currentColor"/></svg>Button</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">להפיק חשבונית אגרות (חיובים תפעוליים שלא קשורים לפעולה ספציפית) — בנפרד מחשבונית עסקה רגילה.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">לחיצה על כפתור "הפק חשבונית אגרות" → מתחיל עם פרטי התיק.</div></li>
+            <li class="step"><div class="step-text">שולף את הלקוח, מוודא קיומו, ואוסף את שורות האגרות הפתוחות.</div></li>
+            <li class="step"><div class="step-text">בונה JSON חיוב בפורמט שדורש API החיוב, ושולח לקבל קבלה.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>הפרדת זרמי הכנסה לצורכי דיוק חשבונאי. אגרות נכנסות לדוח אחר מחיוב פעולות.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span><span class="app http" data-tip="HTTP">H</span></div>
+          <div class="scn-stats"><span>מודולים <strong>9</strong></span><span class="sep"></span><span>פילטרים <strong>2</strong></span><span class="sep"></span><span>retry <strong>9</strong></span><span class="sep"></span><span class="metric"><strong>450</strong> ops</span></div>
+        </div>
+      </article>
+
+      <!-- 2425954 -->
+      <article class="scn" data-cat="finance" data-keywords="deprecated קבלה ישן backup 2425954" style="--c: var(--cat-finance);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">פיננסים</span><span class="scn-id"><strong>#2425954</strong></span></div>
+            <h3>הפקת חשבונית מס/קבלה — גרסה ישנה (גיבוי)</h3>
+          </div>
+          <span class="trig button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z" fill="currentColor"/></svg>Button</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">הגרסה הקודמת של #8896622, סומנה כ-deprecated אבל עדיין פעילה כרשת ביטחון.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">תהליך דומה ל-#8896622 אבל ללא הפיכוניזציה של ה-Python — 36 מודולים שעושים אותה עבודה בצורה יותר לינארית.</div></li>
+            <li class="step"><div class="step-text">25 retry handlers — מורכבות גבוהה ולכן הוקדשה לה רשת בטחון רחבה.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div><strong>המלצה: ארכוב בעוד חודש-חודשיים</strong> אחרי וידוא יציבות 8896622. רשת בטחון לתקופת המעבר.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span><span class="app http" data-tip="HTTP">H</span><span class="app aggregator" data-tip="Aggregators">∑</span></div>
+          <div class="scn-stats"><span>מודולים <strong>36</strong></span><span class="sep"></span><span>retry <strong>25</strong></span></div>
+        </div>
+      </article>
+
+      <!-- 5649166 -->
+      <article class="scn" data-cat="finance" data-keywords="חשבונית עסקה הופקה מעקב 5649166" style="--c: var(--cat-finance);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">פיננסים</span><span class="scn-id"><strong>#5649166</strong></span></div>
+            <h3>חשבונית עסקה הופקה → רשומה במעקב</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">בכל הפקה של חשבונית עסקה — לפתוח אוטומטית "כרטיס מעקב" במערכת, כדי שדשבורד החיובים יישאר אמין.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">חשבונית עסקה הופקה ב-API החיוב → טריגר.</div></li>
+            <li class="step"><div class="step-text">3 שאילתות PowerLink במקביל לוודא שהקישורים נכונים: לקוח · תיק · פעולה.</div></li>
+            <li class="step"><div class="step-text">יוצר רשומה במעקב חשבוניות עסקה עם כל הקישורים, הסכום והסטטוס "פתוחה".</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>דשבורד "חיובים פתוחים" אמין בכל רגע. סוף לדוחות עם מספרים ישנים.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span><span class="app http" data-tip="HTTP">H</span><span class="app aggregator" data-tip="Aggregator">∑</span></div>
+          <div class="scn-stats"><span>מודולים <strong>10</strong></span><span class="sep"></span><span>retry <strong>4</strong></span><span class="sep"></span><span class="metric"><strong>440</strong> ops</span></div>
+        </div>
+      </article>
+
+      <!-- 5649526 -->
+      <article class="scn" data-cat="finance" data-keywords="חשבונית עסקה בוטלה ביטול 5649526" style="--c: var(--cat-finance);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">פיננסים</span><span class="scn-id"><strong>#5649526</strong></span></div>
+            <h3>חשבונית עסקה בוטלה → עדכון מעקב</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">למחוק חיוב שבוטל מתוך מצב "פתוחים" בדשבורד — בלי תיקון ידני.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">חשבונית בוטלה ב-API החיוב → טריגר.</div></li>
+            <li class="step"><div class="step-text">שאילתה לרשומת המעקב המתאימה ועדכון הסטטוס ל"בוטלה".</div></li>
+            <li class="step"><div class="step-text">שליפת פרטים מורחבים מ-API ועדכון הפעולות הקשורות (אם היו).</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>טיהור אוטומטי של חיובים מבוטלים. דוחות חודשיים נשארים נקיים.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span><span class="app http" data-tip="HTTP">H</span></div>
+          <div class="scn-stats"><span>מודולים <strong>7</strong></span><span class="sep"></span><span>retry <strong>6</strong></span><span class="sep"></span><span class="metric"><strong>244</strong> ops</span></div>
+        </div>
+      </article>
+
+      <!-- 5649735 -->
+      <article class="scn" data-cat="finance" data-keywords="קבלה הופקה שולם reconciliation 5649735" style="--c: var(--cat-finance);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">פיננסים</span><span class="scn-id"><strong>#5649735</strong></span></div>
+            <h3>קבלה הופקה → סגירת כל החשבוניות הקשורות</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">ברגע שלקוח שילם — לסמן בבת אחת את כל החשבוניות העסקה שהקבלה הזאת מסכמת כ"שולמו".</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">קבלה הופקה ב-API החיוב → טריגר.</div></li>
+            <li class="step"><div class="step-text">שליפת פרטי הקבלה המלאים — כולל רשימת כל החשבוניות עסקה שנכללו בה.</div></li>
+            <li class="step"><div class="step-text">לולאה (Feeder) על כל חשבונית — שליפת הרשומה במעקב.</div></li>
+            <li class="step"><div class="step-text">עדכון סטטוס ל"שולם" בכל אחת. <strong>קבלה אחת יכולה לסכם 5–10 חשבוניות, וכולן מסומנות ברצף.</strong></div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>סוף ל-reconciliation ידני בסוף חודש. חיסכון משמעותי בשעות הנהלת חשבונות, ודוח גבייה אמין בכל רגע.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span><span class="app http" data-tip="HTTP">H</span><span class="app aggregator" data-tip="Loop">∑</span></div>
+          <div class="scn-stats"><span>מודולים <strong>5</strong></span><span class="sep"></span><span>retry <strong>4</strong></span><span class="sep"></span><span class="metric"><strong>648</strong> ops</span></div>
+        </div>
+      </article>
+
+      <!-- 2423949 -->
+      <article class="scn" data-cat="finance" data-keywords="חוקר תשלום מחירון 2423949" style="--c: var(--cat-finance);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">פיננסים</span><span class="scn-id"><strong>#2423949</strong></span></div>
+            <h3>תשלום אוטומטי לחוקר לפי המחירון שלו</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לחשב לבד כמה החוקר מקבל על כל פעולה — לפי מחירון אישי שלו ב-Powerlink.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">בכל יצירת פעולה — שאילתת PowerLink Query לטבלת המחירון של החוקר הספציפי.</div></li>
+            <li class="step"><div class="step-text">שליפת המחיר הרלוונטי לסוג החקירה.</div></li>
+            <li class="step"><div class="step-text">עדכון שדה "סכום לתשלום" בפעולה.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div><strong>שילוב חוקר חדש דורש רק רשומת מחירון אחת — לא שינוי בקוד</strong>. תשלומים מדויקים בלי טעויות.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>4</strong></span><span class="sep"></span><span>פילטרים <strong>1</strong></span><span class="sep"></span><span>retry <strong>3</strong></span><span class="sep"></span><span class="metric"><strong>100</strong> ops</span></div>
+        </div>
+      </article>
+
+      <!-- 1947435 -->
+      <article class="scn" data-cat="finance" data-keywords="חיוב חריג הערה 1947435" style="--c: var(--cat-finance);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">פיננסים</span><span class="scn-id"><strong>#1947435</strong></span></div>
+            <h3>תיעוד חיוב חריג כהערה בהזמנה</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">לכל חיוב חריג שמופיע במערכת — להוסיף הערה מקושרת בהזמנה כדי לשמר את ההיסטוריה.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">חיוב חריג נוצר ב-Powerlink → טריגר.</div></li>
+            <li class="step"><div class="step-text">קריאה ל-<code>powerlink:addComment</code> שמוסיפה הערה אוטומטית להזמנה המשויכת עם פרטי החיוב.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div>תיעוד מלא של חריגות תמחור. הגנה משפטית ושקיפות מול הלקוח אם תידרש בעתיד.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span></div>
+          <div class="scn-stats"><span>מודולים <strong>2</strong></span><span class="sep"></span><span>retry <strong>2</strong></span></div>
+        </div>
+      </article>
+
+      <!-- 2425940 -->
+      <article class="scn" data-cat="finance" data-keywords="דוח google docs template 2425940" style="--c: var(--cat-finance);">
+        <header class="scn-head">
+          <div>
+            <div class="scn-meta"><span class="scn-cat">פיננסים</span><span class="scn-id"><strong>#2425940</strong></span></div>
+            <h3>הפקת דו"ח ללקוח — Google Docs Template</h3>
+          </div>
+          <span class="trig"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Webhook</span>
+        </header>
+        <div class="scn-section">
+          <div class="sec-label">המטרה</div>
+          <div class="purpose">להפיק לחוקר/למשרד דו"ח ללקוח אוטומטית מתבנית Google Docs, עם כל המשתנים מולאים.</div>
+        </div>
+        <div class="scn-section">
+          <div class="sec-label">המהלך</div>
+          <ol class="flow">
+            <li class="step"><div class="step-text">טריגר עם recordid של הפעולה.</div></li>
+            <li class="step"><div class="step-text">שליפה מקבילה: הפעולה, הנבדק, ההזמנה, המשלם.</div></li>
+            <li class="step"><div class="step-text">Switcher שבוחר את התבנית הנכונה לפי סוג הדו"ח.</div></li>
+            <li class="step"><div class="step-text">יצירת מסמך Google Docs מתבנית עם החלפת placeholders.</div></li>
+            <li class="step"><div class="step-text">קישור המסמך כהערה באובייקט הפעולה ב-CRM.</div></li>
+          </ol>
+        </div>
+        <div class="impact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <div><strong>30 דקות → 7 שניות</strong>. דו"ח רשמי מוכן ללקוח בקליק, עם דיוק וקונסיסטנטיות.</div>
+        </div>
+        <div class="scn-foot">
+          <div class="apps"><span class="app powerlink" data-tip="Powerlink">P</span><span class="app docs" data-tip="Google Docs">D</span></div>
+          <div class="scn-stats"><span>מודולים <strong>9</strong></span><span class="sep"></span><span>retry <strong>7</strong></span><span class="sep"></span><span class="metric"><strong>400</strong> ops</span></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- Empty state -->
+<section class="category" id="empty-state" style="display:none;">
+  <div class="container">
+    <div class="empty">
+      <strong>לא נמצאו אוטומציות מתאימות</strong>
+      נסה מילת חיפוש אחרת או נקה את הסינון
+    </div>
+  </div>
+</section>
+
+<!-- Closing -->
+<section class="closing">
+  <div class="container">
+    <h2>34 אוטומציות. מערכת אחת.<br/>אפס שגיאות בייצור.</h2>
+    <p>
+      כל אחת מהאוטומציות במסמך הזה היא חוליה בשרשרת ערך אחת.
+      ביחד הן מהוות את הצינור התפעולי המלא של עובדה חקירות — מהשנייה שטופס נשלח ועד השנייה שקבלה נסגרת.
+    </p>
+    <div class="badges">
+      <div class="badge">2 קליטה</div>
+      <div class="badge">10 ולידציה</div>
+      <div class="badge">7 מחזור חיים</div>
+      <div class="badge">3 תפעול חוקרים</div>
+      <div class="badge">11 פיננסים</div>
+      <div class="badge">7 פונקציות Python</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    הוכן ע״י <strong>Optimate Automations</strong> · אפריל 2026<br/>
+    מבוסס על ניתוח אוטומטי של 34 ה-Blueprints הפעילים בחשבון Make.com Org #1796803<br/>
+    מטריקות: 1,268 ריצות נדגמו · 13,393 פעולות · 0 שגיאות
+  </div>
+</footer>
+
+<button class="totop" id="totop" aria-label="חזרה לראש">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg>
+</button>
+
+<script>
+  const searchInput = document.getElementById('search');
+  const filterChips = document.querySelectorAll('#filters .chip');
+  const allCards = document.querySelectorAll('.scn');
+  const allCategories = document.querySelectorAll('.category[data-cat]');
+  const emptyState = document.getElementById('empty-state');
+  let currentCat = 'all';
+  let currentQuery = '';
+
+  function applyFilter() {
+    let totalVisible = 0;
+    let perCatVisible = {};
+    allCards.forEach(card => {
+      const cat = card.dataset.cat;
+      const keywords = (card.dataset.keywords || '').toLowerCase();
+      const text = card.innerText.toLowerCase();
+      const matchCat = currentCat === 'all' || cat === currentCat;
+      const matchQuery = !currentQuery || keywords.includes(currentQuery) || text.includes(currentQuery);
+      const visible = matchCat && matchQuery;
+      card.hidden = !visible;
+      if (visible) {
+        totalVisible++;
+        perCatVisible[cat] = (perCatVisible[cat] || 0) + 1;
+      }
+    });
+    allCategories.forEach(catSec => {
+      const cat = catSec.dataset.cat;
+      catSec.hidden = !(perCatVisible[cat] && perCatVisible[cat] > 0);
+    });
+    emptyState.style.display = totalVisible === 0 ? 'block' : 'none';
+  }
+
+  searchInput.addEventListener('input', e => {
+    currentQuery = e.target.value.trim().toLowerCase();
+    applyFilter();
+  });
+
+  filterChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      filterChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      currentCat = chip.dataset.cat;
+      applyFilter();
+      if (currentCat !== 'all') {
+        const target = document.getElementById('cat-' + currentCat);
+        if (target) {
+          const offset = window.innerWidth <= 720 ? 160 : 130;
+          window.scrollTo({ top: target.offsetTop - offset, behavior: 'smooth' });
+        }
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && document.activeElement !== searchInput) {
+      e.preventDefault();
+      searchInput.focus();
+      searchInput.select();
+    }
+    if (e.key === 'Escape' && document.activeElement === searchInput) {
+      searchInput.value = '';
+      currentQuery = '';
+      applyFilter();
+      searchInput.blur();
+    }
+  });
+
+  const totop = document.getElementById('totop');
+  window.addEventListener('scroll', () => {
+    totop.classList.toggle('visible', window.scrollY > 600);
+  }, { passive: true });
+  totop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+</body>
+</html>
